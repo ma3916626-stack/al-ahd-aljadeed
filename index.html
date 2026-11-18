@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مدرستي اليمنية</title>
+<style>
+:root{--bg:#0b0b0b;--c:#17181c;--c2:#202127;--r:#e5484d;--t:#f4f4f5;--m:#9a9aa3;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;font-family:Tajawal,Tahoma,sans-serif}
+html,body{background:var(--bg);color:var(--t);height:100%}
+#app{max-width:520px;margin:auto;min-height:100%;padding:8px 14px 96px}
+.hd{display:flex;align-items:center;justify-content:space-between;border:1px solid #5a2326;border-radius:14px;padding:8px 12px;margin-bottom:12px}
+.hd b{color:var(--r);font-size:20px;display:block}.hd small{color:var(--m)}
+.ic{background:none;border:0;color:var(--r);font-size:22px;margin-inline-start:10px;cursor:pointer}
+h2{font-size:22px;margin:14px 0 8px}
+.card{background:var(--c);border-radius:16px;padding:12px;margin:8px 0}
+.btn{background:var(--r);color:#fff;border:0;border-radius:14px;padding:13px;font-size:17px;font-weight:700;width:100%;cursor:pointer}
+.btn.o{background:var(--c);border:1px solid var(--r);color:var(--r)}.btn.s{width:auto;padding:6px 14px;font-size:14px;border-radius:10px}
+input,select,textarea{width:100%;background:#0f1013;border:1px solid #33343b;color:var(--t);border-radius:12px;padding:12px;font-size:16px;margin:5px 0}
+label{color:var(--m);font-size:14px}
+.row{display:flex;gap:8px;align-items:center}.sp{justify-content:space-between}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.chip{flex:none;border:1px solid var(--r);border-radius:12px;padding:10px 16px;background:var(--c);color:var(--t);font-weight:700;cursor:pointer}
+.chip.on{background:var(--r)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sub{background:var(--c);border-radius:16px;padding:12px;cursor:pointer}.sub i{font-style:normal;font-size:30px}
+.bar{height:6px;background:#333;border-radius:4px;margin-top:8px}.bar div{height:100%;background:var(--r);border-radius:4px}
+.nav{position:fixed;bottom:0;inset-inline:0;max-width:520px;margin:auto;background:#101113;border-top:2px solid #5a2326;display:flex;justify-content:space-around;align-items:center;padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;color:var(--m);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}.nav button span{font-size:22px}.nav .on{color:var(--r)}
+.nav .plus{background:var(--r);color:#fff;border-radius:50%;width:48px;height:48px;font-size:28px;justify-content:center;margin-top:-18px}
+.av{width:42px;height:42px;border-radius:50%;background:var(--c2);display:grid;place-items:center;font-weight:800;color:var(--r);border:2px solid var(--r);overflow:hidden;flex:none}.av img{width:100%;height:100%;object-fit:cover}
+.av.big{width:92px;height:92px;font-size:34px}
+.st{display:flex;gap:12px;overflow-x:auto;padding:6px 0}.st div{text-align:center;font-size:12px;cursor:pointer;flex:none;width:64px}
+.post video,.post img.m{width:100%;border-radius:12px;margin-top:8px;max-height:260px}
+.fl{display:flex;align-items:center;gap:10px;border:1px solid var(--r);border-radius:12px;padding:10px;margin-top:8px;color:var(--t);text-decoration:none}
+.act{display:flex;gap:22px;margin-top:8px;color:var(--m)}.act span{cursor:pointer}
+.mut{color:var(--m);font-size:13px}.em{text-align:center;color:var(--m);padding:24px}
+.bub{max-width:80%;padding:9px 12px;border-radius:14px;margin:4px 0;background:var(--c2)}.bub.me{background:var(--r);margin-inline-start:auto}
+.ov{position:fixed;inset:0;background:#000d;display:none;place-items:center;z-index:9;padding:16px}.ov.on{display:grid}
+.ov>div{background:var(--c);border-radius:18px;padding:16px;width:100%;max-width:460px;max-height:90vh;overflow:auto}
+#splash{background:#0b0b0b;z-index:20;text-align:center}#splash img{width:140px;height:140px;border-radius:24px;object-fit:cover}
+#toast{position:fixed;top:60px;inset-inline:0;margin:auto;width:max-content;max-width:90%;background:var(--r);padding:10px 16px;border-radius:12px;z-index:30;display:none}
+.tag{background:#3a1416;color:var(--r);border-radius:8px;padding:2px 8px;font-size:12px}
+</style></head><body>
+<div id="app"></div>
+<div id="toast"></div>
+<div class="ov on" id="splash" onclick="this.classList.remove('on')"><div style="background:none"></div></div>
+<div class="ov" id="ov"><div id="ovc"></div></div>
+<script>
+const G={3:'ثالث ثانوي',2:'ثاني ثانوي',1:'أول ثانوي'};
+const BASE=[['math','رياضيات','🧮'],['phy','فيزياء','⚛️'],['chem','كيمياء','🧪'],['bio','أحياء','🌿'],['ar','عربي','📘'],['en','إنجليزي','🌐'],['quran','قرآن','📖'],['isl','إسلامية','🕌']];
+const EXTRA=[['geo','جغرافيا','🗺️'],['his','تاريخ','📜'],['nat','وطنية','🇾🇪']];
+const subs=g=>g==1?BASE.concat(EXTRA):BASE;
+const mem={};
+const L=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return k in mem?mem[k]:d}};
+const W=(k,v)=>{mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('المساحة ممتلئة')}};
+let users=L('u',[]),posts=L('p',[]),notes=L('n',[]),msgs=L('m',[]),stories=L('s',[]);
+let cfg=L('c',{school:'مدرستي اليمنية',by:'محمد حسن الحكمي',img:''});
+let S={v:'auth',g:3,sub:null,f:'all',chat:null,at:'users',reg:false,me:L('me',null)};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const U=id=>users.find(u=>u.id==id);
+const me=()=>S.me&&(U(S.me)||(S.me=='guest'?{id:'guest',name:'ضيف',role:'guest',follows:[]}:null));
+const adm=()=>{const m=me();return m&&(m.role=='owner'||m.role=='admin')};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}
+function ago(t){const m=Math.round((Date.now()-t)/6e4);return m<1?'الآن':m<60?'منذ '+m+' دقيقة':m<1440?'منذ '+Math.round(m/60)+' ساعة':'منذ '+Math.round(m/1440)+' يوم'}
+const av=(u,c)=>`<div class="av ${c||''}">${u&&u.avatar?`<img src="${u.avatar}">`:esc((u&&u.name||'؟')[0])}</div>`;
+function splash(){const s=$('splash');s.firstElementChild.innerHTML=`<img src="${cfg.img||'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#17181c"/><path d="M20 70V35l30-12 30 12v35L50 80z" fill="#e5484d"/><path d="M50 30v45M28 42l22 8 22-8" stroke="#fff" stroke-width="4" fill="none"/></svg>')}"><h1 style="margin:14px 0 4px">${esc(cfg.school)}</h1><p class="mut">🇾🇪 من إنشاء ${esc(cfg.by)} 👨🏻‍💻</p><p class="mut" style="margin-top:20px">اضغط للمتابعة</p>`;setTimeout(()=>s.classList.remove('on'),2600)}
+function hdr(){return `<div class="hd"><div><b>${esc(cfg.school)} 🇾🇪</b><small>التعليم عن بُعد</small></div><div>${adm()?'<button class="ic" onclick="S.at=\'site\';go(\'admin\')">✏️</button>':''}<button class="ic" onclick="go('notes')">🔔</button><button class="ic" onclick="go('msgs')">💬</button></div></div>`}
+function nav(){const t=[['home','🏠','الرئيسية'],['search','🔍','البحث'],['pub','＋','نشر'],['msgs','💬','الرسائل'],['me','👤','حسابي']];return `<div class="nav">${t.map(([k,i,n])=>k=='pub'?`<button class="plus" onclick="openPub()">${i}</button>`:`<button class="${S.v==k?'on':''}" onclick="go('${k}')"><span>${i}</span>${n}</button>`).join('')}</div>`}
+function go(v,x){if(S.me=='guest'&&['msgs','me'].includes(v)&&v=='msgs'){toast('سجّل دخولك لاستخدام الرسائل');return}S.v=v;if(x!==undefined)S.sub=x;R();scrollTo(0,0)}
+function R(){const a=$('app');if(S.v=='auth'||!me()){a.innerHTML=authH();return}const m=me();if(m.banned){logout();return}
+const V={home:homeH,lib:libH,sub:subH,search:searchH,msgs:msgsH,chat:chatH,me:meH,notes:notesH,ai:aiH,admin:adminH}[S.v]||homeH;a.innerHTML=hdr()+V()+nav()}
+/* AUTH */
+function authH(){return `<div style="text-align:center;margin-top:40px"><h1 style="color:var(--r);font-size:34px">${esc(cfg.school)}</h1><p class="mut">التعليم عن بُعد 🇾🇪</p><h2 style="font-size:28px">أهلاً بك في مدرستك</h2><p class="mut">${S.reg?'أنشئ حسابك الجديد':'سجّل الدخول للمتابعة والتعلم'}</p></div><div class="card">${S.reg?'<label>الاسم</label><input id="nm" placeholder="اسمك الكامل">':''}<label>البريد الإلكتروني أو رقم الهاتف (+967)</label><input id="lg" dir="ltr" placeholder="name@mail.com / +9677XXXXXXXX"><label>كلمة المرور</label><input id="pw" type="password">${S.reg?'<label>الصف</label><select id="gr"><option value="3">ثالث ثانوي</option><option value="2">ثاني ثانوي</option><option value="1">أول ثانوي</option></select>':''}</div><button class="btn" onclick="${S.reg?'reg()':'login()'}">${S.reg?'إنشاء الحساب':'دخول'}</button><br><br><button class="btn o" onclick="S.reg=!S.reg;R()">${S.reg?'لدي حساب':'إنشاء حساب جديد'}</button><p class="em">أو</p><button class="btn o" style="width:60%;display:block;margin:auto;color:var(--t);border-color:#444" onclick="S.me='guest';S.v='home';R()">دخول كضيف</button>${galH()}`}
+function reg(){const n=$('nm').value.trim(),l=$('lg').value.trim(),p=$('pw').value;if(!n||p.length<6)return toast('الاسم مطلوب وكلمة المرور 6 أحرف على الأقل');if(!/^\S+@\S+\.\S+$/.test(l)&&!/^\+967\d{9}$/.test(l))return toast('أدخل بريداً صحيحاً أو رقماً يبدأ بـ +967');if(users.some(u=>u.login==l))return toast('الحساب موجود مسبقاً');
+const u={id:uid(),name:n,login:l,pw:p,grade:+$('gr').value,role:users.length?'student':'owner',follows:[],links:{},logins:1,last:Date.now(),joined:Date.now()};users.push(u);W('u',users);enter(u)}
+function login(){const l=$('lg').value.trim(),p=$('pw').value,u=users.find(x=>x.login==l&&x.pw==p);if(!u)return toast('بيانات الدخول غير صحيحة');if(u.banned)return toast('هذا الحساب محظور');u.logins=(u.logins||0)+1;u.last=Date.now();W('u',users);enter(u)}
+function enter(u){S.me=u.id;S.g=u.grade||3;W('me',u.id);S.v='home';R()}
+function logout(){S.me=null;W('me',null);S.v='auth';R()}
+/* HOME */
+function vis(p){const a=U(p.uid),m=me();if(!a||a.banned)return false;if(!a.private||adm()||a.id==m.id||(m.follows||[]).includes(a.id))return true;return false}
+function storyVis(s){const a=U(s.uid),m=me();if(!a)return false;return a.role!='student'||adm()||a.id==m.id||((m.follows||[]).includes(a.id))}
+function homeH(){const m=me(),ss=stories.filter(s=>Date.now()-s.t<864e5&&storyVis(s));
+const lst=posts.filter(vis).sort((a,b)=>b.t-a.t);
+return `<div class="st"><div onclick="addStory()">${av(m)}قصتي ＋</div>${ss.map(s=>`<div onclick="showStory('${s.id}')">${av(U(s.uid))}${esc(U(s.uid).name.split(' ')[0])}</div>`).join('')}</div>
+<div class="row"><button class="btn" onclick="S.lt='file';go('lib')">📄 الملفات</button><button class="btn" onclick="S.lt='video';go('lib')">🎬 الفيديوهات</button></div><h2>اختر صفك</h2><div class="chips">${[3,2,1].map(g=>`<div class="chip ${S.g==g?'on':''}" onclick="S.g=${g};R()">${G[g]}</div>`).join('')}</div>
+<div class="row sp"><h2>المواد</h2><button class="btn s" onclick="go('ai')">🧠 المعلم الذكي</button></div><div class="grid">${subs(S.g).map(([k,n,i])=>{const c=posts.filter(p=>p.g==S.g&&p.sub==k).length;return `<div class="sub" onclick="go('sub','${k}')"><i>${i}</i> <b>${n}</b><div class="mut">${c} دروس</div><div class="bar"><div style="width:${Math.min(100,c*20)}%"></div></div></div>`}).join('')}</div>
+<div class="row sp"><h2>الإشعارات 🔔</h2><span class="mut" onclick="go('notes')">عرض الكل</span></div>${notes.slice(-3).reverse().map(n=>`<div class="card">${esc(n.txt)}<div class="mut">${ago(n.t)}</div></div>`).join('')||'<p class="em">لا إشعارات</p>'}
+<h2>آخر المنشورات</h2>${lst.slice(0,20).map(postH).join('')||'<p class="em">لا توجد منشورات بعد. اضغط ＋ للنشر</p>'}`}
+function postH(p){const a=U(p.uid)||{name:'؟'},m=me(),lk=(p.likes||[]).includes(m.id),fo=(m.follows||[]).includes(a.id);
+return `<div class="card post"><div class="row">${av(a)}<div style="flex:1"><b>${esc(a.name)}</b> ${a.role!='student'?'✅':''}<div class="mut">${ago(p.t)} • ${G[p.g]||''} • ${(subs(3).concat(EXTRA).find(x=>x[0]==p.sub)||[])[1]||''}</div></div>${a.id!=m.id&&m.role!='guest'?`<button class="btn o s" onclick="follow('${a.id}')">${fo?'تتابعه':'+ متابعة'}</button>`:''}</div>
+<p style="margin-top:8px"><b>${esc(p.title)}</b></p><p>${esc(p.text)}</p>
+${p.type=='video'&&(p.url||p.bid)?`<video controls playsinline preload="metadata" ${p.bid?`data-bid="${p.bid}"`:`src="${p.url}"`}></video>`:''}${p.type=='file'&&(p.url||p.bid)?`<div class="fl" onclick="dl('${p.id}')">📄 ${esc(p.fname||p.title)} ⬇️ تحميل</div>`:''}${p.link?`<a class="fl" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 فتح الرابط</a>`:''}${p.img?`<img class="m" src="${p.img}">`:''}
+<div class="act"><span onclick="like('${p.id}')">${lk?'❤️':'🤍'} ${(p.likes||[]).length}</span><span onclick="comment('${p.id}')">💬 ${(p.cm||[]).length}</span>${adm()||p.uid==m.id?`<span style="margin-inline-start:auto;color:var(--r);font-weight:700" onclick="delPost('${p.id}')">🗑 حذف</span>`:''}</div>${(p.cm||[]).slice(-2).map(c=>`<div class="mut">${esc(c)}</div>`).join('')}</div>`}
+function like(id){const p=posts.find(x=>x.id==id),m=me();if(m.role=='guest')return toast('سجّل دخولك للتفاعل');p.likes=p.likes||[];const i=p.likes.indexOf(m.id);i<0?p.likes.push(m.id):p.likes.splice(i,1);W('p',posts);R()}
+function comment(id){const m=me();if(m.role=='guest')return toast('سجّل دخولك للتعليق');const t=prompt('اكتب تعليقك');if(!t)return;const p=posts.find(x=>x.id==id);(p.cm=p.cm||[]).push(m.name+': '+t);W('p',posts);R()}
+function delPost(id){if(!confirm('حذف المنشور؟'))return;const dp=posts.find(p=>p.id==id);if(dp&&dp.bid)idbDel(dp.bid).catch(()=>{});posts=posts.filter(p=>p.id!=id);W('p',posts);R()}
+function follow(id){const m=me(),i=(m.follows=m.follows||[]).indexOf(id);i<0?m.follows.push(id):m.follows.splice(i,1);W('u',users);R()}
+function addStory(){const m=me();if(m.role=='guest')return toast('سجّل دخولك');const t=prompt('اكتب حالتك');if(!t)return;stories.push({id:uid(),uid:m.id,text:t,t:Date.now()});W('s',stories);R()}
+function showStory(id){const s=stories.find(x=>x.id==id);ov(`<div class="row">${av(U(s.uid))}<b>${esc(U(s.uid).name)}</b></div><h2 style="margin:24px 0">${esc(s.text)}</h2><button class="btn" onclick="cl()">إغلاق</button>`)}
+function ov(h){$('ovc').innerHTML=h;$('ov').classList.add('on')}function cl(){$('ov').classList.remove('on');$('ovc').innerHTML=''}
+/* SUBJECT */
+function subH(){const s=subs(S.g).find(x=>x[0]==S.sub)||['','',''];const l=posts.filter(p=>p.g==S.g&&p.sub==S.sub&&vis(p)).sort((a,b)=>b.t-a.t);return `<button class="btn o s" onclick="go('home')">رجوع</button><h2>${s[2]} ${s[1]} - ${G[S.g]}</h2>${l.map(postH).join('')||'<p class="em">لا توجد دروس بعد</p>'}<button class="btn" onclick="openPub()">＋ إضافة درس</button>`}
+/* PUBLISH */
+function openPub(){const m=me();if(!m||m.role=='guest')return toast('سجّل دخولك للنشر');ov(`<h2>نشر جديد</h2><label>النوع</label><select id="pt"><option value="post">منشور</option><option value="video">فيديو / شرح</option><option value="file">ملف PDF</option></select><label>العنوان</label><input id="ptt"><label>الوصف</label><textarea id="ptx" rows="2"></textarea><label>نص الدرس أو الشرح (منه يجيب الذكاء الاصطناعي)</label><textarea id="pbd" rows="5"></textarea><label>الصف</label><select id="pg">${[3,2,1].map(g=>`<option value="${g}" ${g==S.g?'selected':''}>${G[g]}</option>`).join('')}</select><label>المادة</label><select id="ps">${subs(1).map(([k,n])=>`<option value="${k}" ${k==S.sub?'selected':''}>${n}</option>`).join('')}</select><label>رابط فيديو أو ملف (يوتيوب / درايف) اختياري</label><input id="pl" dir="ltr" placeholder="https://"><label>أو ارفع ملف / فيديو (بدون حد للحجم)</label><input type="file" id="pf"><button class="btn" onclick="doPub()">نشر</button>`)}
+function doPub(){const f=$('pf').files[0],m=me(),t=$('ptt').value.trim();if(!t)return toast('أدخل عنوان');
+const fin=(url,bid)=>{const p={id:uid(),uid:m.id,type:$('pt').value,title:t,text:$('ptx').value,body:$('pbd').value,g:+$('pg').value,sub:$('ps').value,url,bid,link:$('pl').value.trim(),fname:f&&f.name,t:Date.now(),likes:[],cm:[]};posts.push(p);notes.push({txt:(p.type=='video'?'فيديو جديد: ':p.type=='file'?'ملف جديد: ':'درس جديد: ')+t,t:Date.now()});W('p',posts);W('n',notes);cl();S.v=S.v=='sub'?'sub':'home';R();toast('تم النشر')};
+if(!f)return fin('');toast('جارٍ حفظ الملف، انتظر...');const bid=uid();idbPut(bid,f).then(()=>fin('',bid)).catch(()=>toast('تعذّر حفظ الملف، مساحة الجهاز ممتلئة'))}
+/* SEARCH */
+function searchH(){return `<input id="q" placeholder="ابحث عن كتاب - درس - فيديو ..." oninput="doSearch()"><div class="chips">${[['all','الكل'],['video','فيديو'],['file','PDF'],['teacher','معلم'],['student','طالب']].map(([k,n])=>`<div class="chip ${S.f==k?'on':''}" onclick="S.f='${k}';R()">${n}</div>`).join('')}</div><h2>النتائج</h2><div id="res">${resH('')}</div>`}
+function resH(q){q=q.trim().toLowerCase();const f=S.f;let h='';if(['all','teacher','student'].includes(f))users.filter(u=>!u.banned&&(f=='all'||(f=='teacher')==(u.role!='student'))&&(!q||u.name.toLowerCase().includes(q))).forEach(u=>h+=`<div class="card row">${av(u)}<div style="flex:1"><b>${esc(u.name)}</b><div class="mut">${u.role!='student'?'معلم':'طالب'} • ${G[u.grade]||''}</div></div>${u.id!=me().id&&me().role!='guest'?`<button class="btn s" onclick="follow('${u.id}')">${(me().follows||[]).includes(u.id)?'تتابعه':'متابعة'}</button>`:''}</div>`);
+if(['all','video','file'].includes(f))posts.filter(p=>vis(p)&&(f=='all'?p.type!='post'||q:p.type==f)&&(!q||(p.title+p.text).toLowerCase().includes(q))).forEach(p=>h+=postH(p));return h||'<p class="em">لا نتائج</p>'}
+function doSearch(){$('res').innerHTML=resH($('q').value)}
+/* MESSAGES */
+function msgsH(){const m=me();return `<h2>الرسائل 💬</h2>${users.filter(u=>u.id!=m.id&&!u.banned).map(u=>{const l=msgs.filter(x=>(x.a==m.id&&x.b==u.id)||(x.a==u.id&&x.b==m.id)).pop();return `<div class="card row" onclick="S.chat='${u.id}';go('chat')">${av(u)}<div><b>${esc(u.name)}</b><div class="mut">${l?esc(l.t):'ابدأ المحادثة'}</div></div></div>`}).join('')||'<p class="em">لا يوجد مستخدمون آخرون بعد</p>'}`}
+function chatH(){const m=me(),o=U(S.chat);const l=msgs.filter(x=>(x.a==m.id&&x.b==o.id)||(x.a==o.id&&x.b==m.id));return `<div class="row"><button class="btn o s" onclick="go('msgs')">رجوع</button>${av(o)}<b>${esc(o.name)}</b></div><div style="min-height:50vh;margin:10px 0">${l.map(x=>`<div class="bub ${x.a==m.id?'me':''}">${esc(x.t)}</div>`).join('')}</div><div class="row"><input id="mt" placeholder="اكتب رسالة"><button class="btn s" onclick="send()">إرسال</button></div>`}
+function send(){const t=$('mt').value.trim();if(!t)return;msgs.push({a:me().id,b:S.chat,t,ts:Date.now()});W('m',msgs);R()}
+/* NOTES */
+function notesH(){return `<h2>الإشعارات 🔔</h2>${notes.slice().reverse().map(n=>`<div class="card">${esc(n.txt)}<div class="mut">${ago(n.t)}</div></div>`).join('')||'<p class="em">لا إشعارات</p>'}`}
+/* PROFILE */
+function meH(){const m=me();if(m.role=='guest')return `<p class="em">أنت داخل كضيف</p><button class="btn" onclick="logout()">تسجيل الدخول</button>`;const mine=posts.filter(p=>p.uid==m.id);const fc=users.filter(u=>(u.follows||[]).includes(m.id)).length;
+return `<div class="card" style="text-align:center"><label style="cursor:pointer">${av(m,'big')}<input type="file" accept="image/*" hidden onchange="setAv(this)"></label><h2>${esc(m.name)}</h2><div class="mut">${m.role=='owner'?'مالك التطبيق':m.role=='admin'?'مشرف':'طالب'} - ${G[m.grade]||''} - اليمن 🇾🇪</div></div>
+<div class="grid"><div class="card" style="text-align:center"><b>${fc}</b><div class="mut">متابع</div></div><div class="card" style="text-align:center"><b>${mine.length}</b><div class="mut">منشور</div></div></div>
+${adm()?`<button class="btn" onclick="go('admin')">🔐 لوحة الأدمن</button><br><br>`:''}
+<h2>الإعدادات</h2><div class="card"><div class="row sp"><span>🔒 حساب خاص</span><input type="checkbox" style="width:auto" ${m.private?'checked':''} onchange="me().private=this.checked;W('u',users)"></div></div>
+<div class="card"><label>روابط الحسابات</label><input placeholder="Instagram" value="${esc((m.links||{}).ig)}" onchange="lnk('ig',this.value)"><input placeholder="WhatsApp" value="${esc((m.links||{}).wa)}" onchange="lnk('wa',this.value)"><input placeholder="Facebook" value="${esc((m.links||{}).fb)}" onchange="lnk('fb',this.value)"></div>
+<div class="card"><b>📲 التواصل</b>${users.filter(u=>u.role!='student').map(u=>`<div class="row" style="margin-top:8px">${av(u)}<span style="flex:1">${esc(u.name)} ${u.role=='owner'?'(منشئ التطبيق)':'(معلم)'}</span><button class="btn s" onclick="S.chat='${u.id}';go('chat')">راسل</button></div>`).join('')}</div>
+<h2>منشوراتي</h2>${mine.map(postH).join('')||'<p class="em">لا منشورات</p>'}<br><button class="btn o" onclick="logout()">تسجيل خروج</button>`}
+function lnk(k,v){const m=me();m.links=m.links||{};m.links[k]=v;W('u',users)}
+let CR;
+function setAv(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{CR={im,z:1,x:0,y:0,s:300};ov(`<h3>ضبط الصورة</h3><canvas id="cv" width="260" height="260" style="width:260px;height:260px;border-radius:50%;display:block;margin:auto;background:#000"></canvas><label>التكبير</label><input type="range" min="1" max="3" step=".05" value="1" oninput="CR.z=+this.value;cdraw()"><label>تحريك أفقي</label><input type="range" min="-100" max="100" value="0" oninput="CR.x=+this.value;cdraw()"><label>تحريك رأسي</label><input type="range" min="-100" max="100" value="0" oninput="CR.y=+this.value;cdraw()"><label>مقاس الصورة المحفوظة (بكسل)</label><select onchange="CR.s=+this.value"><option>150</option><option selected>300</option><option>500</option><option>800</option></select><br><button class="btn" onclick="csave()">حفظ</button>`);cdraw()};im.src=r.result};r.readAsDataURL(f)}
+function cpaint(c){const S=c.width,{im,z,x,y}=CR,k=S/Math.min(im.width,im.height)*z,w=im.width*k,h=im.height*k,g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,S,S);g.drawImage(im,(S-w)/2+x/100*S/2,(S-h)/2+y/100*S/2,w,h)}
+function cdraw(){cpaint($('cv'))}
+function csave(){const c=document.createElement('canvas');c.width=c.height=CR.s;cpaint(c);me().avatar=c.toDataURL('image/jpeg',.85);W('u',users);cl();R()}
+/* ADMIN */
+function adminH(){if(!adm())return '';const t=S.at;return `<button class="btn o s" onclick="go('me')">رجوع</button><h2>لوحة الأدمن 🔐</h2><div class="chips">${[['users','المستخدمون'],['msgs','كل الرسائل'],['site','المدرسة']].map(([k,n])=>`<div class="chip ${t==k?'on':''}" onclick="S.at='${k}';R()">${n}</div>`).join('')}</div>`+
+(t=='users'?`<p class="mut">إجمالي المسجلين: ${users.length}</p>`+users.map(u=>`<div class="card"><div class="row">${av(u)}<div style="flex:1"><b>${esc(u.name)}</b> ${u.banned?'<span class="tag">محظور</span>':''}<div class="mut" dir="ltr" style="text-align:right">${esc(u.login)}</div><div class="mut">${G[u.grade]||''} • دخل ${u.logins||0} مرة • آخر دخول ${u.last?ago(u.last):'-'}</div></div></div>${u.role!='owner'?`<div class="row" style="margin-top:8px"><button class="btn s" onclick="ban('${u.id}')">${u.banned?'فك الحظر':'حظر'}</button>${me().role=='owner'?`<button class="btn o s" onclick="mkAdm('${u.id}')">${u.role=='admin'?'إزالة الإشراف':'منح صلاحية أدمن'}</button>`:''}</div>`:''}</div>`).join(''):
+t=='msgs'?msgs.slice().reverse().map(x=>`<div class="card"><b>${esc((U(x.a)||{}).name)}</b> ← <b>${esc((U(x.b)||{}).name)}</b><div>${esc(x.t)}</div><div class="mut">${ago(x.ts)}</div></div>`).join('')||'<p class="em">لا رسائل</p>':
+`<div class="card"><label>اسم المدرسة</label><input id="cs" value="${esc(cfg.school)}"><label>منشئ التطبيق</label><input id="cb" value="${esc(cfg.by)}"><label>صورة المدرسة</label><input type="file" accept="image/*" id="ci"><button class="btn" onclick="saveCfg()">حفظ</button></div><div class="card"><b>صور الطلاب والمدرسة (تظهر تحت تسجيل الدخول، 5 على الأقل)</b><div class="grid">${picsList().map((p,i)=>`<div><img src="${p}" style="width:100%;border-radius:12px"><button class="btn o s" onclick="delPic(${i})">حذف</button></div>`).join('')}</div><label>إضافة صورة</label><input type="file" accept="image/*" onchange="addPic(this)"></div>`)}
+function ban(id){const u=U(id);u.banned=!u.banned;W('u',users);R()}
+function mkAdm(id){const u=U(id);u.role=u.role=='admin'?'student':'admin';W('u',users);R()}
+function saveCfg(){cfg.school=$('cs').value;cfg.by=$('cb').value;const f=$('ci').files[0];const done=()=>{W('c',cfg);R();toast('تم الحفظ')};if(!f)return done();shrink(f,d=>{cfg.img=d;done()})}
+/* AI */
+let chatAI=[];
+function aiH(){const m=me();if(!chatAI.length)chatAI.push({b:1,t:`✋🏻 مرحباً ${m.name}، أنا نموذج ذكاء اصطناعي تم برمجتي من قبل (${cfg.by}) وأستطيع حل جميع أسئلة طلاب الثانوية العامة. أخبرنا ما الذي تريد أن نتعرف عليه اليوم وما هي المادة التي تريدني أساعدك فيها؟`});
+return `<div class="row"><button class="btn o s" onclick="go('home')">رجوع</button><h2 style="margin:0">🧠 المعلم الذكي</h2></div><div id="ab" style="margin:10px 0;min-height:45vh">${chatAI.map(bubH).join('')}</div><div class="row"><input id="aq" placeholder="اكتب سؤالك أو مسألة حسابية"><button class="btn s" onclick="askAI()">إرسال</button></div>`}
+function askAI(){const q=$('aq').value.trim();if(!q)return;chatAI.push({t:q});let a;if(/^[\d\s+\-*/().^×÷]+$/.test(q)){try{const v=Function('"use strict";return ('+q.replace(/×/g,'*').replace(/÷/g,'/').replace(/\^/g,'**')+')')();a='الناتج = '+v}catch(e){a='تعذّر حساب المعادلة، تأكد من كتابتها.'}}else return localAI(q);chatAI.push({b:1,t:a});R()}
+const DP=['🧑‍🎓','👩‍🎓','📚','🏫','🎓','✏️'].map((e,i)=>'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${['#3a1416','#202127','#5a2326','#17181c','#2a0f11','#33343b'][i]}"/><text x="50" y="66" font-size="52" text-anchor="middle">${e}</text></svg>`));
+const picsList=()=>cfg.pics&&cfg.pics.length?cfg.pics:DP;
+function galH(){return `<h2 style="text-align:center">🏫 ${esc(cfg.school)}</h2><img src="${cfg.img||DP[3]}" style="width:100%;border-radius:16px;max-height:200px;object-fit:cover"><h2>طلاب المدرسة 🎓</h2><div class="grid" style="grid-template-columns:1fr 1fr 1fr">${picsList().map(p=>`<img src="${p}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px">`).join('')}</div>`}
+function shrink(f,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,500/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.75))};im.src=r.result};r.readAsDataURL(f)}
+function addPic(i){const f=i.files[0];if(!f)return;shrink(f,d=>{cfg.pics=picsList().concat(d);W('c',cfg);R()})}
+function delPic(i){cfg.pics=picsList().filter((_,j)=>j!=i);W('c',cfg);R();if(cfg.pics.length<5)toast('الأفضل أن تكون 5 صور على الأقل')}
+function libH(){const t=S.lt||'file';const l=posts.filter(p=>p.type==t&&(p.url||p.bid||p.link)&&p.g==S.g&&vis(p)).sort((a,b)=>b.t-a.t);return `<div class="chips"><div class="chip ${t=='file'?'on':''}" onclick="S.lt='file';R()">📄 الملفات</div><div class="chip ${t=='video'?'on':''}" onclick="S.lt='video';R()">🎬 الفيديوهات</div></div><div class="chips">${[3,2,1].map(g=>`<div class="chip ${S.g==g?'on':''}" onclick="S.g=${g};R()">${G[g]}</div>`).join('')}</div>${l.map(postH).join('')||'<p class="em">لا يوجد محتوى بعد، اضغط ＋ للنشر</p>'}`}
+async function dl(id){const p=posts.find(x=>x.id==id);try{const d=typeof claude!=='undefined'?await claude.use('downloads'):null;let blob=null;if(p.bid)blob=await idbGet(p.bid);if(!d){const a=document.createElement('a');a.href=blob?URL.createObjectURL(blob):p.url;a.download=p.fname||p.title;a.click();return}let u;if(blob)u=new Uint8Array(await blob.arrayBuffer());else{const b=atob(p.url.split(',')[1]);u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i)}await d.save({filename:p.fname||(p.title+'.pdf'),data:u})}catch(e){if(!e||e.code!='declined')toast('تعذّر التحميل')}}
+function upd(){const e=$('ab');if(e)e.innerHTML=chatAI.map(bubH).join('')}
+async function aiSample(q){const m=me();chatAI.push({b:1,t:'...'});const k=chatAI.length-1;R();try{const s=await claude.use('sample');if(!s){chatAI[k].t='الذكاء الاصطناعي غير متاح في هذا العرض. افتح الصفحة من حسابك في Claude.';upd();return}const h=chatAI.slice(1,k-1).map(x=>(x.b?'المعلم: ':'الطالب: ')+x.t).join('\n');const pr=`أنت معلم ذكي داخل تطبيق ${cfg.school}، برمجك ${cfg.by}. تحل أسئلة طلاب الثانوية العامة في اليمن: رياضيات، فيزياء، كيمياء، أحياء، عربي، إنجليزي، قرآن، تربية إسلامية، وللصف الأول الثانوي جغرافيا وتاريخ وتربية وطنية. أجب بالعربية بخطوات واضحة ومختصرة ونص عادي بدون Markdown.\n\nالمحادثة السابقة:\n${h}\n\nسؤال الطالب (${m.name}، ${G[m.grade]||''}): ${q}`;const r=await s(pr,{cache:false,onText:({text})=>{chatAI[k].t=text||'...';upd()}});chatAI[k].t=r.text||chatAI[k].t}catch(e){chatAI[k].t=e&&e.code=='not_granted'?'لم تسمح بتشغيل الذكاء الاصطناعي. أرسل السؤال مرة أخرى ووافق على الإذن.':'تعذّر الاتصال بالذكاء الاصطناعي الآن، حاول مرة أخرى.'}upd()}
+const STOP=new Set(['في','من','علي','الي','عن','ما','ماذا','كيف','هل','هو','هي','او','ان','اشرح','لي','هذا','هذه','لماذا','متي','اين','اذكر','عرف','وش','ايش','هاذا','انا','اريد','ابغي']);
+const norm=s=>String(s||'').toLowerCase().replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي');
+const toks=s=>norm(s).split(/[^\u0600-\u06FFa-z0-9]+/).filter(t=>t.length>=2&&!STOP.has(t)).map(t=>t.length>3&&t.startsWith('ال')?t.slice(2):t);
+const sn=k=>(subs(1).find(x=>x[0]==k)||[])[1]||'';
+function bubH(x){return `<div class="bub ${x.b?'':'me'}">${esc(x.t)}${(x.ids||[]).map(id=>{const p=posts.find(z=>z.id==id);return p?`<div class="fl" onclick="openItem('${id}')">${p.type=='video'?'🎬':p.type=='file'?'📄':'📘'} ${esc(p.title)}</div>`:''}).join('')}</div>`}
+function openItem(id){const p=posts.find(x=>x.id==id);if(!p)return;if(p.type=='video'&&(p.url||p.bid))ov(`<h3>${esc(p.title)}</h3><video controls playsinline ${p.bid?`data-bid="${p.bid}"`:`src="${p.url}"`} style="width:100%"></video><br><button class="btn" onclick="cl()">إغلاق</button>`);else if(p.link)window.open(p.link,'_blank');else if(p.type=='file'&&(p.url||p.bid))dl(id);else{S.g=p.g;go('sub',p.sub)}}
+function localAI(q){const m=me(),T=toks(q);let ans,ids=[];
+if(!T.length)ans='اكتب سؤالك بكلمات أوضح، مثل: ما هو قانون نيوتن الثاني؟';else{
+const r=posts.filter(vis).map(p=>{const ti=toks(p.title),bd=norm(p.title+' '+(p.text||'')+' '+(p.body||'')),sj=norm(sn(p.sub));let s=0;T.forEach(t=>{if(ti.some(x=>x.includes(t)||t.includes(x)))s+=3;if(sj.includes(t))s+=2;s+=Math.min(bd.split(t).length-1,4)});return{p,s,s2:s+(p.g==m.grade?.5:0)}}).filter(x=>x.s>=1.5).sort((a,b)=>b.s2-a.s2).slice(0,3);
+if(!r.length)ans='لم أجد إجابة عن سؤالك في دروس وملفات وفيديوهات التطبيق. جرّب كلمات أخرى، أو راسل المعلم من قسم الرسائل.';else{const top=r[0].p;const ss=((top.text||'')+'\n'+(top.body||'')).split(/[.\n؟?!۔]+/).map(x=>x.trim()).filter(x=>x.length>8).map(x=>({x,h:T.filter(t=>norm(x).includes(t)).length})).filter(o=>o.h>0).sort((a,b)=>b.h-a.h).slice(0,2);const ex=ss.length?ss.map(o=>o.x).join('. '):(top.text||'').slice(0,200);ans=`وجدت الإجابة في "${top.title}" (${sn(top.sub)} - ${G[top.g]||''}):\n\n${ex||'افتح الدرس لمشاهدة التفاصيل.'}\n\nالدروس المتعلقة بسؤالك:`;ids=r.map(x=>x.p.id)}}
+chatAI.push({b:1,t:ans,ids});R()}
+let _db;const idb=()=>_db||(_db=new Promise((res,rej)=>{const r=indexedDB.open('madrasti',1);r.onupgradeneeded=()=>r.result.createObjectStore('f');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
+const idbPut=(k,v)=>idb().then(d=>new Promise((res,rej)=>{const t=d.transaction('f','readwrite');t.objectStore('f').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)}));
+const idbGet=k=>idb().then(d=>new Promise((res,rej)=>{const q=d.transaction('f').objectStore('f').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}));
+const idbDel=k=>idb().then(d=>{d.transaction('f','readwrite').objectStore('f').delete(k)});
+const bu={};
+function hydrate(){document.querySelectorAll('[data-bid]').forEach(async e=>{const id=e.dataset.bid;e.removeAttribute('data-bid');try{if(!bu[id]){const b=await idbGet(id);if(b)bu[id]=URL.createObjectURL(b)}if(bu[id])e.src=bu[id]}catch(x){}})}
+new MutationObserver(hydrate).observe(document.body,{childList:true,subtree:true});
+splash();if(S.me)S.v='home';R();
+</script></body></html>
